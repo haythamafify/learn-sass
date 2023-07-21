@@ -1,0 +1,411 @@
+@use "./sass/layout/global-rules";
+
+@use "./sass/pages/contact";
+@use "./sass/variables/colors" as *;
+@use "./sass/helpers/mixins" as *;
+@use "./sass/helpers/functions" as *;
+// global variable
+$alt-color: green;
+
+.header {
+  color: $alt-color;
+}
+
+.footer {
+  $alt-color: black !global;
+  background-color: $alt-color;
+}
+
+.copy-right {
+  background-color: $alt-color;
+}
+
+.sidebar {
+  background-color: $main;
+  color: $alt;
+}
+
+.parent {
+  font-weight: bold;
+
+  .child {
+    font-size: 15px;
+
+    .grand-child {
+      font-size: 10px;
+    }
+  }
+}
+
+.parent {
+  > .child {
+    padding: 50px;
+  }
+
+  .child2 {
+    padding: 150px;
+  }
+
+  + p {
+    font-size: 20px;
+  }
+}
+
+.parent {
+  > {
+    .ele-on {
+      font-style: normal;
+    }
+
+    .ele-two {
+      font-size: 20px;
+    }
+
+    .ele-two-2 {
+      font-size: 20px;
+    }
+  }
+
+  .not-direct-child {
+    font-style: italic;
+  }
+}
+
+.box {
+  .title {
+    font-size: small;
+  }
+
+  .desc {
+    font-size: large;
+  }
+
+  .title-1 {
+    font-size: x-large;
+  }
+
+  &.red {
+    color: red;
+  }
+
+  &.green {
+    color: green;
+  }
+
+  &.blue {
+    color: blue;
+  }
+
+  &:hover {
+    background-color: #fff;
+  }
+
+  &:hover .title {
+    font-size: 55px;
+
+    color: #fff;
+  }
+
+  &:not(.box) {
+    color: aqua;
+  }
+
+  [dir="rtl"] & {
+    direction: rtl;
+  }
+}
+
+.box {
+  margin: auto {
+    top: 100px;
+    bottom: 50px;
+  }
+
+  font: {
+    size: 50px;
+    weight: bold;
+  }
+}
+
+%main-box {
+  background-color: #fff;
+  padding: 15px;
+  border: 2px solid #ccc;
+}
+
+.ads {
+  @extend %main-box;
+  font: 20ppx;
+  color: rgb(0, 0, 0);
+}
+
+.my-box {
+  @extend %main-box;
+  color: blue($color: #000000);
+}
+
+$theme: "dark";
+
+.page {
+  @if $theme == "light" {
+    background-color: white;
+    color: #444;
+  } @else {
+    background-color: #444;
+    color: white;
+  }
+}
+
+$roundes: false;
+
+.box {
+  border-radius: if($roundes, 6px, null);
+}
+
+$direction: "left";
+
+.arrow-div {
+  @extend %main-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  margin: 50px auto;
+
+  &::before {
+    content: "";
+    border: 20px solid transparent;
+    position: absolute;
+
+    @if $direction == "top" {
+      top: -14%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: red;
+    } @else if $direction == "right" {
+      right: -41px;
+      border-left-color: red;
+      transform: translatey(-50%);
+      top: 50%;
+    } @else if($direction == "bottom") {
+      transform: translateX(-50%);
+
+      bottom: -41px;
+      border-top-color: red;
+    } @else if($direction == "left") {
+      left: -41px;
+      border-right-color: red;
+      top: 50%;
+      transform: translatey(-50%);
+    } @else {
+      @error "this direc #{$direction} is not valid";
+    }
+  }
+}
+
+$company: "elzero";
+$position: "left";
+
+.ad-#{$company}-#{unique-id()} {
+  font-size: 20px;
+  background-image: url("img/#{$company}.png");
+  #{$position}: 0;
+}
+
+.ad-#{unique-id()} {
+  font-size: 50px;
+}
+
+@mixin list-rest {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+ul.links {
+  @include list-rest;
+}
+
+.circle-100 {
+  @include circle(100px);
+}
+
+.circle-200 {
+  @include circle(200px);
+}
+
+.circle-300 {
+  @include circle(300px);
+}
+
+.circle-100-centre {
+  @include centreing;
+  @include circle(100px);
+}
+
+@for $i from 1 through 10 {
+  .class-#{$i} {
+    font-size: #{$i + 10px};
+  }
+}
+
+$dimension: 0;
+
+@for $i from 1 through 500 {
+  // 100 +0 = 100
+  .circle-#{100 + $dimension} {
+    width: 100px + $dimension;
+    height: 100px + $dimension;
+    border-radius: 50%;
+    @include centreing;
+    background-color: #000000;
+  }
+
+  $dimension: $dimension + 100;
+}
+
+$thems-color: Red, Green, Blue, Yellow, Cyan, Magenta, White, Black;
+
+@each $theme in $thems-color {
+  .them-#{$theme} {
+    color: $theme;
+  }
+}
+
+$scocial-networks: (
+  "face": "blue",
+  "linkedin": "light blue",
+  "youtube ": "red",
+);
+
+@each $k, $v in $scocial-networks {
+  .social-#{$k} {
+    color: #{$v};
+
+    &::before {
+      content: $k;
+    }
+  }
+}
+
+$classes: "one" 20px red, "two" 50px blue, "three" 100px green,
+  "three" 150px #eee;
+
+@each $class, $fs, $color in $classes {
+  .#{$class} {
+    font-size: $fs/2;
+    color: $color;
+  }
+}
+
+$start: 1;
+
+@while $start <=10 {
+  .width-#{$start*100} {
+    width: $start * 100px;
+    height: ($start * 100px)/2;
+  }
+
+  $start: $start + 1;
+}
+
+$grid-cols: 12;
+
+@for $i from 1 through $grid-cols {
+  .col-#{$i} {
+    width: percentage($i/12);
+  }
+}
+
+$width: 250px;
+
+@function calculates($params...) {
+  $total: 0;
+
+  @each $p in $params {
+    $total: $total + $p;
+  }
+
+  @return $total;
+}
+
+.ele {
+  width: $width;
+  height: half($width);
+  top: calculates(100px, 200px, 500px);
+}
+
+@mixin overlay($color, $opacity) {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  background-color: rgba($color, $opacity);
+}
+
+.overlay {
+  @include overlay(black, 0.5);
+}
+
+@include keyframe(fadein) {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@include keyframe(go-up) {
+  from {
+    bottom: 0;
+  }
+
+  to {
+    bottom: 1000px;
+  }
+}
+
+@include keyframe(go-down) {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: 105px;
+  }
+}
+
+.media-small{
+  @include breakpoints(small){
+    font-size: 100px;
+background-color: #444;
+
+  };
+}
+
+.media-medium{
+@include breakpoints(medium){
+font-size: 200px;
+background-color: aquamarine;
+}
+
+}
+
+.media-large{
+  @include breakpoints(large) {
+font-size: 300px;
+background-color: blueviolet;
+  }
+}
+
+.media-mobile{
+  @include breakpoints(large) {
+    font-size: large;
+    background-color: brown;
+  }
+}
